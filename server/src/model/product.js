@@ -12,9 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     price: DataTypes.INTEGER,
     type_of_clothes: DataTypes.ENUM('Shirt', 'Pants', 'Accessories'),
     description: DataTypes.TEXT,
-    ctgr_id: DataTypes.INTEGER,
-    size_id: DataTypes.INTEGER,
-    image_id: DataTypes.INTEGER
+    cat_id: DataTypes.STRING,
+    size: DataTypes.ENUM('S', 'M', 'L', '39', '40', '41', '42'),
   }, {
     sequelize,
     modelName: 'Product',

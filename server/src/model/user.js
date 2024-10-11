@@ -8,13 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         }
     };
     User.init({
-        userName: DataTypes.STRING,
+        email: DataTypes.STRING,
         password: DataTypes.STRING,
         name: DataTypes.STRING,
-        email: DataTypes.STRING,
         phone: DataTypes.STRING,
         role: DataTypes.ENUM('admin', 'customer'),
-        pd_id: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'User',
