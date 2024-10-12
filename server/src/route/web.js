@@ -8,9 +8,11 @@ let initWebRouters = (app) => {
   //user router
 
   //product router
-  router.get("/getAllProducts", productController.getProducts);
-  router.get("/get-display-create-new-product", productController.getDisplayCreateNewProduct);
-  router.post("/post-new-product", productController.postProduct);
+  router.get("/api/get-all-products", productController.handleGetAllProducts);
+  router.post("/api/create-new-product", productController.handleCreateNewProduct);
+  router.put("/api/edit-product", productController.handleEditProduct);
+  router.delete("/api/delete-product", productController.handleDeleteProduct)
+
   return app.use("/", router);
 };
 
