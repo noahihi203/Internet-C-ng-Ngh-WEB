@@ -35,7 +35,6 @@ let createNewProduct = async (data) => {
   });
 };
 
-
 module.exports = {
   getAllProducts: getAllProducts,
   createNewProduct: createNewProduct,

@@ -10,6 +10,7 @@ let initWebRouters = (app) => {
   //product router
   router.get("/getAllProducts", productController.getProducts);
   router.get("/get-display-create-new-product", productController.getDisplayCreateNewProduct);
+  router.post("/post-new-product", productController.postProduct);
   return app.use("/", router);
 };
 
