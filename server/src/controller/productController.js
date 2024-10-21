@@ -9,8 +9,7 @@ let handleGetAllProducts = async (req, res) => {
       products: [],
     });
   }
-  let products = await productService.getAllProducts(id);
-  console.log(products);
+  let products = await productService.getAllProducts(pd_id);
   return res.status(200).json({
     errCode: 0,
     errMessage: "OK",

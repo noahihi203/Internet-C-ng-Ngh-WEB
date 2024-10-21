@@ -66,7 +66,7 @@ let deleteProduct = (productId) => {
     });
   });
 };
-let updateUserData = (data) => {
+let updateProductData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!data.pd_id) {
@@ -106,4 +106,5 @@ module.exports = {
   getAllProducts: getAllProducts,
   createNewProduct: createNewProduct,
   deleteProduct: deleteProduct,
+  updateProductData: updateProductData,
 };
