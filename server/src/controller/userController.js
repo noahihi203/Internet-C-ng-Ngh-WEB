@@ -1,5 +1,6 @@
 import userService from "../services/userService"
-
+import otpService from "../services/otpService"
+import nodemailer from 'nodemailer';
 const handleRegister = async (req, res) => {
     try {
         const { email, password, name, phone,role } = req.body;
@@ -63,8 +64,96 @@ const handleLogin = async (req, res) => {
         });
     }
 }
+const handleForgotPassword = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({
+                message: 'Missing email'
+            });
+        }
+
+        const user = await userService.checkUserEmail(email);
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const otp = otpService.generateOtp();
+        await otpService.saveOtp(email, otp);
+
+        const transporter = nodemailer.createTransport({
+            service: 'gmail',
+            port: 465,
+            secure: true,
+            logger: true,
+            debug: true,
+            secureConnection: false,
+            auth: {
+                user: process.env.EMAIL_USER,
+                pass: process.env.EMAIL_PASS
+            },
+            tls:{
+                rejectUnauthorized: true
+            }
+        });
+
+        const mailOptions = {
+            from: 'process.env.EMAIL_USER',
+            to: email,
+            subject: 'Password Reset OTP',
+            text: `Your OTP for password reset is ${otp}`
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        return res.status(200).json({
+            message: 'OTP sent to email'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Error from server',
+            error: error.message
+        });
+    }
+}
+
+const handleChangePassword = async (req, res) => {
+    try {
+        const { email, otp, newPassword } = req.body;
+
+        if (!email || !otp || !newPassword) {
+            return res.status(400).json({
+                message: 'Missing required parameters'
+            });
+        }
+
+        const isValidOtp = await otpService.verifyOtp(email, otp);
+        if (!isValidOtp) {
+            return res.status(400).json({
+                message: 'Invalid OTP'
+            });
+        }
+
+        await userService.updateUserPassword(email, newPassword);
+        await otpService.deleteOtp(email);
+
+        return res.status(200).json({
+            message: 'Password changed successfully'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Error from server',
+            error: error.message
+        });
+    }
+}
 
 module.exports = {
     handleRegister,
-    handleLogin
+    handleLogin,
+    handleForgotPassword,
+    handleChangePassword
 }

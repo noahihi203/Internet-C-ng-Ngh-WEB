@@ -8,6 +8,9 @@ let initWebRouters = (app) => {
 
   router.post("/register", userController.handleRegister);
   router.post("/login", userController.handleLogin);
+  router.post('/forgot-password', userController.handleForgotPassword);
+  router.post('/change-password', userController.handleChangePassword);
+
   router.get("/api/get-all-products", productController.handleGetAllProducts);
   router.post("/api/create-new-product", productController.handleCreateNewProduct);
   router.put("/api/edit-product", productController.handleEditProduct);
