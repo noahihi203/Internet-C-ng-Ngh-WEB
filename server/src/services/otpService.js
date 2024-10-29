@@ -1,5 +1,6 @@
 import otpGenerator from 'otp-generator';
 import db from '../models/index';
+
 const generateOtp = () => {
     return otpGenerator.generate(4, { upperCase: false, specialChars: false, alphabets: false, digits: true });
 }

@@ -1,26 +1,9 @@
 import db from '../models/index';
 import bcrypt from 'bcryptjs';
-import nodemailer from 'nodemailer';
-import otpGenerator from 'otp-generator';
+import otpService from "../services/otpService"
 
 const salt = bcrypt.genSaltSync(10);
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    port: 465,
-    secure: true,
-    logger: true,
-    debug: true,
-    secureConnection: false,
-
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    },
-    tls:{
-        rejectUnauthorized: true
-    }
-});
 
 const hashPassword = (password) => {
     return bcrypt.hashSync(password, salt);
@@ -29,12 +12,14 @@ const hashPassword = (password) => {
 const createNewUser = async (userData) => {
     try {
         const hashedPassword = hashPassword(userData.password);
+        const newotp = otpService.generateOtp();
         const newUser = await db.User.create({
             email: userData.email,
             password: hashedPassword,
             name: userData.name,
             phone: userData.phone,
-            role: "Customer"
+            role: "Customer",
+            otp: newotp
         });
         return newUser;
     } catch (error) {
@@ -83,10 +68,6 @@ const sendOtpEmail = async (email, otp) => {
     await transporter.sendMail(mailOptions);
 }
 
-const generateOtp = () => {
-    return otpGenerator.generate(6, { upperCase: false, specialChars: false });
-}
-
 const forgotPassword = async (email) => {
     try {
         const user = await db.User.findOne({ where: { email: email }});
@@ -105,19 +86,23 @@ const forgotPassword = async (email) => {
 
 const resetPassword = async (email, otp, newPassword) => {
     try {
-        const user = await db.User.findOne({ where: { email: email, otp: otp }});
-        if (user) {
-            user.password = hashPassword(newPassword);
-            user.otp = null; 
-            await user.save();
-            return true;
+        // Await the findOne method
+        const user = await db.User.findOne({ where: { email: email, otp: otp } });
+        
+        // Check if the user was found
+        if (!user) {
+            throw new Error('Invalid email or OTP');
         }
-        return false;
+        const newotp = otpService.generateOtp();
+        user.password = hashPassword(newPassword);
+        user.otp = newotp; 
+
+        // Save the user object
+        await user.save();
     } catch (error) {
-        throw error;
+        throw error;  
     }
 }
-
 module.exports = {
     createNewUser,
     checkUserEmail,

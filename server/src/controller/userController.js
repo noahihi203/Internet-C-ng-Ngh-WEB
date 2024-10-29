@@ -112,6 +112,7 @@ const handleForgotPassword = async (req, res) => {
         return res.status(200).json({
             message: 'OTP sent to email'
         });
+
     } catch (error) {
         return res.status(500).json({
             message: 'Error from server',
@@ -123,23 +124,8 @@ const handleForgotPassword = async (req, res) => {
 const handleChangePassword = async (req, res) => {
     try {
         const { email, otp, newPassword } = req.body;
-
-        if (!email || !otp || !newPassword) {
-            return res.status(400).json({
-                message: 'Missing required parameters'
-            });
-        }
-
-        const isValidOtp = await otpService.verifyOtp(email, otp);
-        if (!isValidOtp) {
-            return res.status(400).json({
-                message: 'Invalid OTP'
-            });
-        }
-
-        await userService.updateUserPassword(email, newPassword);
-        await otpService.deleteOtp(email);
-
+        await userService.resetPassword(email, otp, newPassword);
+        
         return res.status(200).json({
             message: 'Password changed successfully'
         });
@@ -150,7 +136,6 @@ const handleChangePassword = async (req, res) => {
         });
     }
 }
-
 module.exports = {
     handleRegister,
     handleLogin,

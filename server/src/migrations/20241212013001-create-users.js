@@ -28,8 +28,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(15),
       },
+      otp: {  
+        type: Sequelize.STRING(4),
+        allowNull: true,
+      },
       role: Sequelize.ENUM("Admin", "Customer"),
-
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

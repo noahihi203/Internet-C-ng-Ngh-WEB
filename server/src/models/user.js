@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       name: DataTypes.STRING(50),
       phone: DataTypes.STRING(15),
+      otp: DataTypes.STRING(4),
       role: DataTypes.ENUM("Admin", "Customer"),
     },
     {
