@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import db from "../models/index";
 import bcrypt from "bcryptjs";
 
@@ -10,13 +9,39 @@ let getAllProducts = (productId) => {
       let products = "";
       if (productId === "ALL") {
         products = await db.Product.findAll({
-          raw: true,
+          include: [
+            {
+              model: db.Category,
+              as: "categoryData",
+              attributes: ["name"],
+            },
+            {
+              model: db.Image,
+              as: "imageData",
+              attributes: ["image_id", "image"],
+            },
+          ],
+          raw: false,
+          nest: true,
         });
       }
       if (productId && productId !== "ALL") {
         products = await db.Product.findOne({
           where: { pd_id: productId },
-          raw: true,
+          include: [
+            {
+              model: db.Category,
+              as: "categoryData",
+              attributes: ["name"],
+            },
+            {
+              model: db.Image,
+              as: "imageData",
+              attributes: ["image_id", "image"],
+            },
+          ],
+          raw: false,
+          nest: true,
         });
       }
       resolve(products);
@@ -69,7 +94,14 @@ let deleteProduct = (productId) => {
 let updateProductData = (data) => {
   return new Promise(async (resolve, reject) => {
     try {
-      if (!data.pd_id) {
+      if (
+        !data.pd_id ||
+        !data.name ||
+        !data.price ||
+        !type_of_clothes ||
+        !description ||
+        !size
+      ) {
         resolve({
           errCode: 2,
           errMessage: "Missing required parameters!",
@@ -102,9 +134,53 @@ let updateProductData = (data) => {
     }
   });
 };
+
+let getAllCategories = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let categories = await db.Category.findAll();
+      resolve({
+        errCode: 0,
+        data: categories,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let getAllImagesById = (pd_id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!pd_id) {
+        resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      } else {
+        let data = await db.Image.findAll({
+          where: { pd_id: pd_id },
+          raw: false,
+        });
+        if (data && data.image) {
+          data.image = new Buffer(data.image, "base64").toString("binary");
+        }
+        if (!data) data = {};
+        resolve({
+          errCode: 0,
+          data: data,
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
-  getAllProducts: getAllProducts,
-  createNewProduct: createNewProduct,
-  deleteProduct: deleteProduct,
-  updateProductData: updateProductData,
+  getAllProducts,
+  createNewProduct,
+  deleteProduct,
+  updateProductData,
+  getAllCategories,
+  getAllImagesById,
 };
