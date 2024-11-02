@@ -1,8 +1,4 @@
 import db from "../models/index";
-import bcrypt from "bcryptjs";
-
-const salt = bcrypt.genSaltSync(10);
-
 let getAllProducts = (productId) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -17,7 +13,7 @@ let getAllProducts = (productId) => {
             },
             {
               model: db.Image,
-              as: "imageData",
+              as: "productImageData",
               attributes: ["image_id", "image"],
             },
           ],
@@ -36,7 +32,7 @@ let getAllProducts = (productId) => {
             },
             {
               model: db.Image,
-              as: "imageData",
+              as: "productImageData",
               attributes: ["image_id", "image"],
             },
           ],
@@ -134,11 +130,13 @@ let updateProductData = (data) => {
     }
   });
 };
-
 let getAllCategories = () => {
   return new Promise(async (resolve, reject) => {
     try {
-      let categories = await db.Category.findAll();
+      let categories = await db.Category.findAll({
+        raw: false,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+      });
       resolve({
         errCode: 0,
         data: categories,
@@ -148,7 +146,6 @@ let getAllCategories = () => {
     }
   });
 };
-
 let getAllImagesById = (pd_id) => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -161,6 +158,7 @@ let getAllImagesById = (pd_id) => {
         let data = await db.Image.findAll({
           where: { pd_id: pd_id },
           raw: false,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         });
         if (data && data.image) {
           data.image = new Buffer(data.image, "base64").toString("binary");

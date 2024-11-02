@@ -63,7 +63,7 @@ let handleDeleteProduct = async (req, res) => {
     });
   }
 };
-let handleGetAllCategories = async (req, res) => {
+let handleGetAllCategories = async (req, res) => { 
   try {
     let categories = await productService.getAllCategories();
     return res.status(200).json(categories);

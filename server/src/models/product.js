@@ -10,15 +10,15 @@ module.exports = (sequelize, DataTypes) => {
       });
       Product.hasMany(models.Image, {
         foreignKey: "pd_id",
-        as: "imageData",
+        as: "productImageData",
       });
       Product.hasMany(models.Order_detail, {
         foreignKey: "pd_id",
-        as: "Order_detail",
+        as: "productOrderData",
       });
       Product.hasMany(models.Cart_item, {
         foreignKey: "pd_id",
-        as: "Cart_item",
+        as: "productCartData",
       });
     }
   }

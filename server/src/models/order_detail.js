@@ -7,10 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "pd_id",
         as: "Product",
       });
-      Order_detail.belongsTo(models.Payment, {
-        foreignKey: "payment_id",
-        as: "Payment",
-      });
+
       Order_detail.belongsTo(models.Order, {
         foreignKey: "order_id",
         as: "Order",
@@ -44,14 +41,6 @@ module.exports = (sequelize, DataTypes) => {
       pd_cost: {
         allowNull: true,
         type: DataTypes.INTEGER,
-      },
-      payment_id: {
-        allowNull: true,
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Payment",
-          key: "payment_id",
-        },
       },
     },
     {

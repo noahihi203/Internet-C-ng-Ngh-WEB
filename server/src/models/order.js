@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "order_id",
         as: "Order_detail",
       });
+      Order.belongsTo(models.Payment, {
+        foreignKey: "payment_id",
+        as: "paymentData",
+      });
     }
   }
   Order.init(
@@ -41,6 +45,14 @@ module.exports = (sequelize, DataTypes) => {
           "Delivering",
           "Delivered"
         ),
+      },
+      payment_id: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
+        references: {
+          model: "Payment",
+          key: "payment_id",
+        },
       },
     },
     {

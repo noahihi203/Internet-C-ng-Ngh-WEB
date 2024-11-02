@@ -1,6 +1,7 @@
 import express from "express";
 import productController from "../controller/productController";
 import userController from "../controller/userController";
+import cartController from "../controller/cartController";
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -24,8 +25,17 @@ let initWebRouters = (app) => {
   );
   router.put("/api/edit-product", productController.handleEditProduct);
   router.delete("/api/delete-product", productController.handleDeleteProduct);
-  router.get("/api/get-all-categories", productController.handleGetAllCategories);
+  router.get(
+    "/api/get-all-categories",
+    productController.handleGetAllCategories
+  );
   router.get("/api/get-all-images", productController.handleGetAllImagesById);
+  //Order API
+  router.post("/api/add-cart", cartController.handleAddCart);
+  router.get("/api/get-cart-by-user-id", cartController.handleGetCartByUserId);
+  router.put("/api/update-cart", cartController.handleUpdateCart);
+  // router.post("/api/delete-cart", cartController.handleAddCart);
+  // router.post("/api/add-cart", cartController.handleAddCart);
 
   return app.use("/", router);
 };
