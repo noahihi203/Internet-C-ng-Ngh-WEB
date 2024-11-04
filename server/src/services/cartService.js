@@ -84,8 +84,61 @@ let updateCart = (data) => {
     }
   });
 };
+
+let deleteCart = (productId, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let cart = await db.Cart_item.findOne({
+        where: { pd_id: productId, user_id: userId },
+        raw: false,
+      });
+      if (!cart) {
+        resolve({
+          errCode: 2,
+          errMessage: `The cart isn't exist`,
+        });
+      }
+      await db.Cart_item.destroy({
+        where: { pd_id: productId, user_id: userId },
+      });
+      resolve({
+        errCode: 0,
+        message: `The cart is deleted`,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+let clearCart = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let cart = await db.Cart_item.findOne({
+        where: { user_id: userId },
+        raw: false,
+      });
+      if (!cart) {
+        resolve({
+          errCode: 2,
+          errMessage: `The cart isn't exist`,
+        });
+      }
+      await db.Cart_item.destroy({
+        where: { user_id: userId },
+      });
+      resolve({
+        errCode: 0,
+        message: `The cart is deleted`,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   addCart,
   getCartByUserId,
   updateCart,
+  deleteCart,
+  clearCart,
 };
