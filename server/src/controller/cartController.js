@@ -42,8 +42,53 @@ let handleUpdateCart = async (req, res) => {
     });
   }
 };
+
+let handleDeleteCart = async (req, res) => {
+  try {
+    console.log("Noah check req", req.body);
+    if (!req.body.pd_id || !req.body.user_id) {
+      return res.status(200).json({
+        errCode: 1,
+        errMessage: "Missing required parameters!",
+      });
+    }
+    let response = await cartService.deleteCart(
+      req.body.pd_id,
+      req.body.user_id
+    );
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server!",
+    });
+  }
+};
+
+let handleClearCart = async (req, res) => {
+  try {
+    if (!req.body.user_id) {
+      return res.status(200).json({
+        errCode: 1,
+        errMessage: "Missing required parameters!",
+      });
+    }
+    let response = await cartService.clearCart(req.body.user_id);
+    return res.status(200).json(response);
+  } catch (e) {
+    console.log(e);
+    return res.status(200).json({
+      errCode: -1,
+      errMessage: "Error from server!",
+    });
+  }
+};
+
 module.exports = {
   handleAddCart,
   handleGetCartByUserId,
   handleUpdateCart,
+  handleDeleteCart,
+  handleClearCart,
 };

@@ -30,12 +30,12 @@ let initWebRouters = (app) => {
     productController.handleGetAllCategories
   );
   router.get("/api/get-all-images", productController.handleGetAllImagesById);
-  //Order API
+  //Cart API
   router.post("/api/add-cart", cartController.handleAddCart);
   router.get("/api/get-cart-by-user-id", cartController.handleGetCartByUserId);
   router.put("/api/update-cart", cartController.handleUpdateCart);
-  // router.post("/api/delete-cart", cartController.handleAddCart);
-  // router.post("/api/add-cart", cartController.handleAddCart);
+  router.delete("/api/delete-cart", cartController.handleDeleteCart);
+  router.delete("/api/clear-cart", cartController.handleClearCart);
 
   return app.use("/", router);
 };
