@@ -12,9 +12,10 @@ const handleRegister = async (req, res) => {
         }
 
         const isExist = await userService.checkUserEmail(email);
-        if (isExist) {
-            return res.status(409).json({
-                message: 'Email already exists'
+        if (isExist) {     
+            return res.status(409).render('pages/register', {
+                emailExists: true,
+                message: 'Email đã tồn tại. Vui lòng thử email khác.',
             });
         }
 

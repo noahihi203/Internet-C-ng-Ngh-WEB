@@ -11,12 +11,16 @@ let initWebRouters = (app) => {
   router.post("/change-password", userController.handleChangePassword);
 
   router.get("/login", (req, res) => {
-    res.render("login");
+    res.render("pages/login");
   });
 
   router.get("/register", (req, res) => {
-    res.render("register");
+    let emailExists = false;
+    let message = "";
+    res.render("pages/register");
   });
+
+
   //Product api
   router.get("/api/get-all-products", productController.handleGetAllProducts);
   router.post(

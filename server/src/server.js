@@ -3,12 +3,18 @@ import bodyParser from "body-parser";
 import viewEngine from "./config/viewEngine";
 import initWebRouters from "./route/web";
 import connectDB from './config/connectDB';
+let app = express();
+const path = require('path');
+const __rootDir = path.dirname(__dirname);
+const __viewsDir = path.join(__rootDir, 'views');
+const __publicDir = path.join(__rootDir, 'public');
 
-// import cors from 'cors';
+app.set('views', __viewsDir);
+app.set('view engine', 'ejs');
+app.use(express.static(__publicDir));
 
 require('dotenv').config();
 
-let app = express();
 
 // app.use(cors({ credentials: true, origin: true }));
 
