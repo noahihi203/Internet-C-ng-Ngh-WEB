@@ -15,8 +15,6 @@ let initWebRouters = (app) => {
   });
 
   router.get("/register", (req, res) => {
-    let emailExists = false;
-    let message = "";
     res.render("pages/register");
   });
 
