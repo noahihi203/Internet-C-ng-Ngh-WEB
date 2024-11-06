@@ -1,7 +1,4 @@
 "use strict";
-
-//const sequelize = require("sequelize");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("orders", {
@@ -12,16 +9,20 @@ module.exports = {
         primaryKey: true,
       },
       cost: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.INTEGER,
       },
       user_id: {
-        allowNull: true,
+        allowNull: false,
         type: Sequelize.INTEGER,
         references: {
           model: "users",
           key: "user_id",
         },
+      },
+      address_shipping: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       status: {
         allowNull: false,
@@ -32,13 +33,9 @@ module.exports = {
           "Delivered"
         ),
       },
-      payment_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "payments",
-          key: "payment_id",
-        },
+      payment_type: {
+        allowNull: false,
+        type: Sequelize.ENUM("CASH", "CARD"),
       },
       createdAt: {
         allowNull: false,

@@ -1,7 +1,4 @@
 "use strict";
-
-//const sequelize = require("sequelize");
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("users", {
@@ -28,7 +25,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING(15),
       },
-      otp: {  
+      otp: {
         type: Sequelize.STRING(4),
         allowNull: true,
       },

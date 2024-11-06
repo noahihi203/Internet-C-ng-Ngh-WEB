@@ -1,7 +1,4 @@
 'use strict';
-
-//const sequelize = require("sequelize");
-
 module.exports = {
     up: async (queryInterface, Sequelize) => {
         await queryInterface.createTable('images', {
@@ -13,10 +10,10 @@ module.exports = {
               },
               image: {
                 allowNull: false,
-                type: Sequelize.BLOB,
+                type: Sequelize.BLOB("long"),
               },
               pd_id: {
-                allowNull: true,
+                allowNull: false,
                 type: Sequelize.INTEGER,
                 references: {
                   model: "products",
