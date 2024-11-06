@@ -38,7 +38,13 @@ let initWebRouters = (app) => {
   router.put("/api/update-cart", cartController.handleUpdateCart);
   router.delete("/api/delete-cart", cartController.handleDeleteCart);
   router.delete("/api/clear-cart", cartController.handleClearCart);
-
+  //Order API
+  router.post("/api/create-order", orderController.handleCreateOrder); //Lưu thông tin vào bảng ORDER và ORDER_DETAIL
+  router.get("/api/get-order", orderController.handleGetOrder); //Lấy thông tin từ bảng ORDER và ORDER_DETAIL
+  router.get("/api/get-order-by-user-id", orderController.handleGetOrderByUserId); //Lấy danh sách đơn hàng của người dùng từ bảng ORDER theo user_id
+  // router.post("/api/create-order", orderController.handleCreateOrder);
+  // router.post("/api/create-order", orderController.handleCreateOrder);
+  // router.post("/api/create-order", orderController.handleCreateOrder);
   return app.use("/", router);
 };
 
