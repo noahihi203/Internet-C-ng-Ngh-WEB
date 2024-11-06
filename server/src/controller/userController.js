@@ -12,17 +12,18 @@ const handleRegister = async (req, res) => {
         }
 
         const isExist = await userService.checkUserEmail(email);
+
         if (isExist) {     
-            return res.status(409).render('pages/register', {
-                emailExists: true,
-                message: 'Email đã tồn tại. Vui lòng thử email khác.',
+            return res.render('pages/register', { 
+                message: 'Email already exists' 
             });
-        }
+        };
+        
 
         const newUser = await userService.createNewUser(req.body);
-        return res.status(201).json({
+        return res.status(201).render("pages/login",{
             message: 'User created successfully',
-            user: newUser
+            user: newUser,
         });
     } catch (error) {
         return res.status(500).json({
@@ -37,14 +38,14 @@ const handleLogin = async (req, res) => {
         const { email, password } = req.body;
         
         if (!email || !password) {
-            return res.status(400).json({
+            return res.status(400).render('pages/login', {
                 message: 'Missing email or password'
             });
         }
 
         const user = await userService.handleUserLogin(email, password);
         if (!user) {
-            return res.status(401).json({
+            return res.status(401).render('pages/login', {
                 message: 'Invalid email or password'
             });
         }
@@ -137,9 +138,23 @@ const handleChangePassword = async (req, res) => {
         });
     }
 }
+
+const getRegister = async (req, res) => {
+    return res.render('pages/register', {
+        message: null
+    });
+}
+
+const getLogin = async (req, res) => {
+    return res.render('pages/login', { 
+        message: null
+    });
+}
 module.exports = {
     handleRegister,
     handleLogin,
     handleForgotPassword,
-    handleChangePassword
+    handleChangePassword,
+    getRegister,
+    getLogin
 }

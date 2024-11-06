@@ -13,6 +13,7 @@
 
     <!-- Header Section -->
     <%- include('../partials/navbar', { activeIdx: 0 }) %>
+    <% if (message != null ) { %> <script> alert('<%= message %>'); </script> <% } %>
     <!-- Main Content Section -->
     <main class="main-content">
         <div class="login-container">

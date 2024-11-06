@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="/vars.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="../partials/message.js"></script>
 </head>
 <body>
-    
-    
-    
     <!-- Header Section -->
     <%- include('../partials/navbar', { activeIdx: 0 }) %>
-    
+
+    <% if (message != null ) { %> <script> alert('<%= message %>'); </script> <% } %>
     <!-- Main Content Section -->
     <main class="main-content">
         <div class="login-container">
@@ -37,7 +36,8 @@
                         <input type="text" name="phone" placeholder="Số Điện Thoại" required> <!-- Phone number field -->
                     </div>
                     <input type="hidden" name="role" value="customer">
-                    <button type="submit" class="login-button">Đăng Ký</button> <!-- Change button text to Đăng Ký -->
+                    <button type="submit" class="login-button">Đăng Ký</button> 
+                    
                 </form>
                 <p>Đã Có Tài Khoản? <a href="/login">Đăng Nhập Ngay!</a></p> <!-- Update link to login -->
                 <p class="terms">
