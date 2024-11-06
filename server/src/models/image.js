@@ -20,10 +20,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       image: {
         allowNull: false,
-        type: DataTypes.BLOB,
+        type: DataTypes.BLOB("long"),
       },
       pd_id: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "Product",

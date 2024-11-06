@@ -11,10 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "order_id",
         as: "Order_detail",
       });
-      Order.belongsTo(models.Payment, {
-        foreignKey: "payment_id",
-        as: "paymentData",
-      });
     }
   }
   Order.init(
@@ -26,16 +22,20 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       cost: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.INTEGER,
       },
       user_id: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.INTEGER,
         references: {
           model: "User",
           key: "user_id",
         },
+      },
+      address_shipping: {
+        allowNull: false,
+        type: DataTypes.STRING,
       },
       status: {
         allowNull: false,
@@ -46,13 +46,9 @@ module.exports = (sequelize, DataTypes) => {
           "Delivered"
         ),
       },
-      payment_id: {
-        allowNull: true,
-        type: DataTypes.INTEGER,
-        references: {
-          model: "Payment",
-          key: "payment_id",
-        },
+      payment_type: {
+        allowNull: false,
+        type: DataTypes.ENUM("CASH", "CARD"),
       },
     },
     {

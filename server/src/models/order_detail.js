@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
   Order_detail.init(
     {
       pd_id: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         references: {
@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       order_id: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.INTEGER,
         primaryKey: true,
         references: {
