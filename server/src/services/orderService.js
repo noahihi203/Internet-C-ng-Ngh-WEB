@@ -72,6 +72,117 @@ let createOrder = (userId, paymentType, addressShipping) => {
 //Thanh toán bằng Momo... => Trang thanh toán (QR code) => Có kết quả từ API momo = 0 => tạo bảng order
 //Không thanh toán bằng momo (thanh toán khi nhận hàng) => Tạo order
 
+let getOrder = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!userId) {
+        return resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      }
+      let data = await db.Order.findAll({
+        where: { user_id: userId },
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: [
+          {
+            model: db.Order_detail, //Lấy danh sách order detail
+            include: [
+              {
+                model: db.Product, //Dựa vào product Id để tìm ra tên sản phẩm giá...
+                as: "productOrderDetailData",
+                include: [
+                  {
+                    model: db.Image, //Dựa vào product_id để lấy ra ảnh cho sản phẩm
+                    attributes: ["image_id", "image"], //lấy ra một mảng nhưng khi hiển thị ở giỏ hàng thì chỉ hiện một hình thôi
+                    as: "productImageData",
+                    attributes: { exclude: ["createdAt", "updatedAt"] },
+                  },
+                ],
+                attributes: { exclude: ["createdAt", "updatedAt"] },
+              },
+            ],
+            as: "orderDetailData",
+            attributes: { exclude: ["createdAt", "updatedAt"] }, //Khi lấy bỏ trường createdAt và updatedAt
+            nest: true,
+            raw: false,
+          },
+        ],
+      });
+      resolve({
+        errCode: 0,
+        data: data,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+//Hiển thị chi tiết tất cả các Order của người dùng theo user_id của họ, kèm theo danh sách các order_detail cho order đó
+
+let getOrderByOrderStatus = (userId, status) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!userId || !status) {
+        //không truyền vào userId hoặc status thì return
+        return resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      }
+      let data;
+      if (status === "ALL") {
+        //nếu truyền vào là ALL thì trả về danh sách đặt hàng
+        data = await db.Order.findAll({
+          where: { user_id: userId },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+      } else {
+        data = await db.Order.findAll({
+          //Nếu truyền vào trạng thái thì trả về theo trạng thái
+          where: { user_id: userId, status: status },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        });
+      }
+      resolve({
+        errCode: 0,
+        data: data,
+      });
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updateOrderStatus = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      if (!data.user_id || !data.order_id) {
+        return resolve({
+          errCode: 1,
+          errMessage: "Missing required parameter!",
+        });
+      } else {
+        let order = await db.Order.findOne({
+          where: { order_id: data.order_id, user_id: data.user_id },
+          raw: false,
+        });
+        order.status = data.status;
+        await order.save();
+        resolve({
+          errCode: 0,
+          errMessage: "Update order status succeed!",
+        });
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createOrder,
+  getOrder,
+  getOrderByOrderStatus,
+  updateOrderStatus,
 };

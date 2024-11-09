@@ -2,6 +2,7 @@ import express from "express";
 import productController from "../controller/productController";
 import userController from "../controller/userController";
 import cartController from "../controller/cartController";
+import orderController from "../controller/orderController";
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -35,8 +36,8 @@ let initWebRouters = (app) => {
   //Order API
   router.post("/api/create-order", orderController.handleCreateOrder); //Lưu thông tin vào bảng ORDER và ORDER_DETAIL
   router.get("/api/get-order", orderController.handleGetOrder); //Lấy thông tin từ bảng ORDER và ORDER_DETAIL
-  router.get("/api/get-order-by-user-id", orderController.handleGetOrderByUserId); //Lấy danh sách đơn hàng của người dùng từ bảng ORDER theo user_id
-  // router.post("/api/create-order", orderController.handleCreateOrder);
+  router.get("/api/get-order-by-order-status", orderController.handleGetOrderByOrderStatus); //Lấy danh sách đơn hàng theo trạng thái đơn hàng
+  router.patch("/api/update-order-status", orderController.handleUpdateOrderStatus);
   // router.post("/api/create-order", orderController.handleCreateOrder);
   // router.post("/api/create-order", orderController.handleCreateOrder);
   return app.use("/", router);
