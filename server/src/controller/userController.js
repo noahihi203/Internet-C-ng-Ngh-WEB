@@ -1,6 +1,7 @@
 import userService from "../services/userService"
 import otpService from "../services/otpService"
 import nodemailer from 'nodemailer';
+import cookieParser from "cookie-parser";
 const handleRegister = async (req, res) => {
     try {
         const { email, password, name, phone,role } = req.body;
@@ -50,15 +51,13 @@ const handleLogin = async (req, res) => {
             });
         }
 
-        return res.status(200).json({
-            message: 'Login successful',
-            user: {
-                id: user.user_id,
-                email: user.email,
-                name: user.name,
-                role: user.role
-            }
-        });
+        res.cookie('authenticated', 'true', { maxAge: exceptTime });
+        res.cookie('id', result[0].user_id, { maxAge: exceptTime });
+        res.cookie('name', result[0].name, { maxAge: exceptTime });
+        res.status(200).json({
+            statusCode: 200,
+            msg: 'Login success',
+          });
     } catch (error) {
         return res.status(500).json({
             message: 'Error from server',

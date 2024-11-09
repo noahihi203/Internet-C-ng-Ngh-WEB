@@ -2,6 +2,7 @@ import express from "express";
 import productController from "../controller/productController";
 import userController from "../controller/userController";
 import cartController from "../controller/cartController";
+import orderController from "../controller/orderController";
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -11,6 +12,9 @@ let initWebRouters = (app) => {
   router.post("/change-password", userController.handleChangePassword);
   router.get("/login", userController.getLogin); 
   router.get("/register", userController.getRegister);
+  router.get("/admin", (req, res) => {
+    res.render("partials/sidebar");
+  });
 
 
   //Product api
@@ -33,9 +37,9 @@ let initWebRouters = (app) => {
   router.delete("/api/delete-cart", cartController.handleDeleteCart);
   router.delete("/api/clear-cart", cartController.handleClearCart);
   //Order API
-  router.post("/api/create-order", orderController.handleCreateOrder); //Lưu thông tin vào bảng ORDER và ORDER_DETAIL
-  router.get("/api/get-order", orderController.handleGetOrder); //Lấy thông tin từ bảng ORDER và ORDER_DETAIL
-  router.get("/api/get-order-by-user-id", orderController.handleGetOrderByUserId); //Lấy danh sách đơn hàng của người dùng từ bảng ORDER theo user_id
+  router.post("/api/create-order", orderController.handleCreateOrder); 
+  //router.get("/api/get-order", orderController.handleGetOrder); 
+  //router.get("/api/get-order-by-user-id", orderController.handleGetOrderByUserId); 
   // router.post("/api/create-order", orderController.handleCreateOrder);
   // router.post("/api/create-order", orderController.handleCreateOrder);
   // router.post("/api/create-order", orderController.handleCreateOrder);
