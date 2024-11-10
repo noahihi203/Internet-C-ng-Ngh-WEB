@@ -12,9 +12,7 @@ let initWebRouters = (app) => {
   router.post("/change-password", userController.handleChangePassword);
   router.get("/login", userController.getLogin); 
   router.get("/register", userController.getRegister);
-  router.get("/admin", (req, res) => {
-    res.render("partials/sidebar");
-  });
+  router.get("/admin", userController.getAdmin);
 
 
   //Product api
