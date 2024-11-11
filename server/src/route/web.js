@@ -40,7 +40,7 @@ let initWebRouters = (app) => {
   router.post("/api/create-order", orderController.handleCreateOrder); //Lưu thông tin vào bảng ORDER và ORDER_DETAIL
   router.get("/api/get-order", orderController.handleGetOrder); //Lấy thông tin từ bảng ORDER và ORDER_DETAIL
   router.get("/api/get-order-by-order-status", orderController.handleGetOrderByOrderStatus); //Lấy danh sách đơn hàng theo trạng thái đơn hàng
-  router.patch("/api/update-order-status", orderController.handleUpdateOrderStatus);
+  router.patch("/api/update-order-status", orderController.handleUpdateOrderStatus); //cập nhật trạng thái của đơn hàng
 
   // router.post("/api/create-order", orderController.handleCreateOrder);
   // router.post("/api/create-order", orderController.handleCreateOrder);
