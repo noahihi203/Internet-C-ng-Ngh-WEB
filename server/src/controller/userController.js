@@ -2,6 +2,12 @@ import userService from "../services/userService"
 import otpService from "../services/otpService"
 import nodemailer from 'nodemailer';
 import cookieParser from "cookie-parser";
+
+const getAdmin = async (req, res) => {
+    return res.render('pages/admin', { 
+        message: null
+    });
+}
 const handleRegister = async (req, res) => {
     try {
         const { email, password, name, phone,role } = req.body;
@@ -50,7 +56,12 @@ const handleLogin = async (req, res) => {
                 message: 'Invalid email or password'
             });
         }
-
+        if (user.role === 'admin') {
+            return res.status(200).render('pages/admin', {
+                message: 'Login success',
+                user: user
+            });
+        }
         res.cookie('authenticated', 'true', { maxAge: exceptTime });
         res.cookie('id', result[0].user_id, { maxAge: exceptTime });
         res.cookie('name', result[0].name, { maxAge: exceptTime });
@@ -149,11 +160,13 @@ const getLogin = async (req, res) => {
         message: null
     });
 }
+
 module.exports = {
     handleRegister,
     handleLogin,
     handleForgotPassword,
     handleChangePassword,
     getRegister,
-    getLogin
+    getLogin,
+    getAdmin
 }
